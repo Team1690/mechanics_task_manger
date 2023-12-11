@@ -47,11 +47,11 @@ GraphQLClient getClient() {
   //           "0F4ePrX2sBhjLMUwhnq0gGn2Rk2TBex4croiIeVk3HvTs1p3Wvac2ssaYYcEnqHS"
   //     });
   final WebSocketLink webSocketLink = WebSocketLink(
-    "wss://natural-rhino-54.hasura.app/v1/graphql",
+    "wss://awake-octopus-95.hasura.app/v1/graphql",
     config: const SocketClientConfig(initialPayload: {
       "headers": {
         "x-hasura-admin-secret":
-            "0F4ePrX2sBhjLMUwhnq0gGn2Rk2TBex4croiIeVk3HvTs1p3Wvac2ssaYYcEnqHS"
+            "h4fHJwftIu92cXxdKPa4xxdc4nA0mVyem58FxVmEMGh90qjrvtXBld5g1yhvEpEt"
       }
     }),
   );
