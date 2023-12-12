@@ -126,64 +126,54 @@ class _MyScaffoldState extends State<MyScaffold> {
                                       assignments: assignments,
                                       names: names,
                                       tasks: tasks,
-                                      onPressedadd: () {
+                                      onPressedadd: (name) {
                                         setState(() {
                                           if (!switchMode) {
                                             sentToDB(
-                                              addPeopleMutation(
-                                                  nameController.text),
+                                              addPeopleMutation(name),
                                               (error) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                         snackbar(error));
                                               },
                                               () {
-                                                names.add(nameController.text);
-                                                nameController.clear();
+                                                names.add(name);
                                               },
                                             );
                                           } else {
                                             sentToDB(
-                                              addTaskMutation(
-                                                  nameController.text),
+                                              addTaskMutation(name),
                                               (error) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                         snackbar(error));
                                               },
                                               () {
-                                                tasks.add(nameController.text);
-                                                nameController.clear();
+                                                tasks.add(name);
                                               },
                                             );
                                           }
                                         });
                                       },
-                                      onPressedRemove: () {
+                                      onPressedRemove: (name) {
                                         setState(() {
                                           if (!switchMode) {
-                                            sentToDB(
-                                                removePeopleMutation(
-                                                    nameController.text),
+                                            sentToDB(removePeopleMutation(name),
                                                 (error) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                       snackbar(error));
                                             }, () {
-                                              names.remove(nameController.text);
-                                              nameController.clear();
+                                              names.remove(name);
                                             });
                                           } else {
-                                            sentToDB(
-                                                removeTasksMutation(
-                                                    nameController.text),
+                                            sentToDB(removeTasksMutation(name),
                                                 (error) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                       snackbar(error));
                                             }, () {
-                                              tasks.remove(nameController.text);
-                                              nameController.clear();
+                                              tasks.remove(name);
                                             });
                                           }
                                         });

@@ -126,7 +126,7 @@ void sentToDB(String mutation, void Function(String error) onFail,
       final GraphQLError error = errors.single;
       errorMessage =
           error.extensions?["code"]?.toString() == "constraint-violation"
-              ? "This person/task already exists"
+              ? "This person/task already exists or assigned somewhere"
               : error.message;
     } else {
       errorMessage = errors.join(", ");
