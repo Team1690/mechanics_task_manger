@@ -154,7 +154,6 @@ class _MyScaffoldState extends State<MyScaffold> {
                                               () {
                                                 tasks.add(nameController.text);
                                                 nameController.clear();
-                                                print("tasks:  $tasks");
                                               },
                                             );
                                           }

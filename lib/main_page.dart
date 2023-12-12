@@ -23,8 +23,8 @@ class MainPage extends StatelessWidget {
   final Map<String, int> assignments;
   final bool switchMode;
   final void Function() onSwitchPressed;
-  final void Function() onPressedRemove;
-  final void Function() onPressedadd;
+  final void Function(String name) onPressedRemove;
+  final void Function(String name) onPressedadd;
   final void Function(String task, String assignedPerson)
       onTaskAssignmentDataRecieved;
   final TextEditingController nameController = TextEditingController();
@@ -117,13 +117,13 @@ class MainPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                onPressedadd;
+                onPressedadd(nameController.text);
               },
             ),
             IconButton(
               icon: const Icon(Icons.remove),
               onPressed: () {
-                onPressedRemove;
+                onPressedRemove(nameController.text);
               },
             ),
             IconButton(
