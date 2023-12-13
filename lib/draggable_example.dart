@@ -12,13 +12,19 @@ class _DraggableExampleState extends State<DraggableExample> {
 
   @override
   Widget build(BuildContext context) {
+    // Check if the theme is dark
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Set the color based on the theme mode
+    Color? backgroundColor = isDarkMode ? Colors.grey[300] : Colors.orange;
+
     return Draggable<String>(
       data: widget.name,
       feedback: Container(
         height: 70.0,
         width: 70.0,
-        decoration: const BoxDecoration(
-          color: Colors.orange,
+        decoration: BoxDecoration(
+          color: backgroundColor,
           shape: BoxShape.circle,
         ),
         child: Text(
@@ -30,8 +36,8 @@ class _DraggableExampleState extends State<DraggableExample> {
       child: Container(
         height: 70.0,
         width: 70.0,
-        decoration: const BoxDecoration(
-          color: Colors.orange,
+        decoration: BoxDecoration(
+          color: backgroundColor,
           shape: BoxShape.circle,
         ),
         child: Center(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mechanics_task_manager/data_base.dart';
 import 'package:mechanics_task_manager/main_page.dart';
 import 'MutionAndSnackBar.dart';
+import 'theme_manager.dart';
 
 class MyAppBar extends StatelessWidget {
   const MyAppBar({required this.title, super.key});
@@ -9,27 +10,29 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 56,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(color: Colors.blue[500]),
-      child: Row(
-        children: [
-          const IconButton(
-            icon: Icon(Icons.menu),
-            tooltip: 'Navigation menu',
-            onPressed: null,
-          ),
-          Expanded(
-            child: title,
-          ),
-          const IconButton(
-            icon: Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: null,
-          ),
-        ],
-      ),
+    return AppBar(
+      title: title,
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.menu),
+          tooltip: 'Navigation menu',
+          onPressed: () {
+            // Define action for menu button
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.search),
+          tooltip: 'Search',
+          onPressed: () {
+            // Define action for search button
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.brightness_4),
+          onPressed: () => ThemeManager.of(context)?.toggleTheme(),
+          tooltip: 'Toggle Theme',
+        ),
+      ],
     );
   }
 }
@@ -66,10 +69,13 @@ class _MyScaffoldState extends State<MyScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Task Manager',
-          style: Theme.of(context).primaryTextTheme.titleLarge,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
+        child: MyAppBar(
+          title: Text(
+            'Task Manager',
+            style: Theme.of(context).primaryTextTheme.titleLarge,
+          ),
         ),
       ),
       body: StreamBuilder(

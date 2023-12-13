@@ -4,6 +4,7 @@ import 'return_people.dart';
 import "tasks.dart";
 import 'draggable_example.dart';
 import 'MutionAndSnackBar.dart';
+import 'theme_manager.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({
@@ -31,111 +32,120 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+    return MyBackgroundWidget(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ...tasks.map((task) => Task(
+                            task: task,
+                            onAccept: (final String assignedPerson) {
+                              sentToDB(
+                                  addAssignmentMutation(assignedPerson, task),
+                                  (error) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackbar(error));
+                              }, () {
+                                onTaskAssignmentDataRecieved(
+                                    task, assignedPerson);
+                              });
+                            },
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Column(children: [
+                                ...assignments.keys
+                                    .where((name) =>
+                                        assignments[name] ==
+                                        tasks.indexOf(task))
+                                    .map((person) {
+                                  return ReturnPeople(
+                                    name: person,
+                                    onPressed: () {
+                                      sentToDB(
+                                          removeAssighmentMutation(
+                                              person, task), (error) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackbar(error));
+                                      }, () {});
+                                    },
+                                  );
+                                })
+                              ]),
+                            ),
+                          ))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Row(
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ...tasks.map((task) => Task(
-                          task: task,
-                          onAccept: (final String assignedPerson) {
-                            sentToDB(
-                                addAssignmentMutation(assignedPerson, task),
-                                (error) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackbar(error));
-                            }, () {
-                              onTaskAssignmentDataRecieved(
-                                  task, assignedPerson);
-                            });
-                          },
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(children: [
-                              ...assignments.keys
-                                  .where((name) =>
-                                      assignments[name] == tasks.indexOf(task))
-                                  .map((person) {
-                                return ReturnPeople(
-                                  name: person,
-                                  onPressed: () {
-                                    sentToDB(
-                                        removeAssighmentMutation(person, task),
-                                        (error) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackbar(error));
-                                    }, () {});
-                                  },
-                                );
-                              })
-                            ]),
-                          ),
-                        ))
-                  ],
+              ...List.generate(
+                names.length,
+                (index) => Expanded(
+                  child: DraggableExample(
+                    name: names[index],
+                  ),
                 ),
-              )
+              ),
             ],
           ),
-        ),
-        Row(
-          children: [
-            ...List.generate(
-              names.length,
-              (index) => Expanded(
-                child: DraggableExample(
-                  name: names[index],
+          Row(
+            children: [
+              const Padding(padding: EdgeInsets.all(16.0)),
+              Expanded(
+                child: TextField(
+                  textDirection: TextDirection.rtl,
+                  style: const TextStyle(color: Colors.black),
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(100.0),
+                        ),
+                        borderSide: BorderSide(),
+                      ),
+                      hintText: "הכנס חבר צוות / משימה",
+                      hintStyle: TextStyle(
+                        color: Colors.black,
+                      ),
+                      hintTextDirection: TextDirection.rtl),
                 ),
               ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const Padding(padding: EdgeInsets.all(16.0)),
-            Expanded(
-              child: TextField(
-                textDirection: TextDirection.rtl,
-                controller: nameController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(100.0),
-                      ),
-                      borderSide: BorderSide(),
-                    ),
-                    hintText: "הכנס חבר צוות / משימה",
-                    hintTextDirection: TextDirection.rtl),
+              IconButton(
+                icon: const Icon(Icons.add),
+                color: Colors.black,
+                onPressed: () {
+                  onPressedadd(nameController.text);
+                },
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () {
-                onPressedadd(nameController.text);
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.remove),
-              onPressed: () {
-                onPressedRemove(nameController.text);
-              },
-            ),
-            IconButton(
-              color: !switchMode ? Colors.red : Colors.green,
-              icon: !switchMode
-                  ? const Icon(Icons.account_circle_rounded)
-                  : const Icon(Icons.add_to_photos),
-              onPressed: onSwitchPressed,
-            ),
-          ],
-        ),
-      ],
+              IconButton(
+                icon: const Icon(Icons.remove),
+                color: Colors.black,
+                onPressed: () {
+                  onPressedRemove(nameController.text);
+                },
+              ),
+              IconButton(
+                color: !switchMode ? Colors.red : Colors.green,
+                icon: !switchMode
+                    ? const Icon(Icons.account_circle_rounded)
+                    : const Icon(Icons.add_to_photos),
+                onPressed: onSwitchPressed,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

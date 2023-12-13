@@ -10,15 +10,21 @@ class Task extends StatefulWidget {
   });
   final Function(String) onAccept;
   final Widget child;
+
   @override
   State<Task> createState() => _TaskState();
 }
-// Text() : Text Function(String)
-// map(f): f: Text Function(String)
 
 class _TaskState extends State<Task> {
   @override
   Widget build(BuildContext context) {
+    // Check if the theme is dark
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Set the color based on the theme mode
+    Color containerColor =
+        isDarkMode ? Colors.cyan[800] ?? Colors.cyan : Colors.cyan;
+
     return DragTarget<String>(
       builder: (
         BuildContext context,
@@ -30,7 +36,7 @@ class _TaskState extends State<Task> {
           child: Container(
             constraints: const BoxConstraints(minHeight: 100),
             width: 100.0,
-            color: Colors.cyan,
+            color: containerColor, // Use the conditional color here
             child: Column(
               children: [
                 Text(
